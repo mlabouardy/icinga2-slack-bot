@@ -1,0 +1,7 @@
+[slack]
+  token="<SLACK BOT TOKEN GOEST HERE>"
+
+[icinga2]
+  host="<ICINGA HOST GOES HERE>"
+  username="root"
+  password="icinga"
