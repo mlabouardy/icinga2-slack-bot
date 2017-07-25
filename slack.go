@@ -148,7 +148,7 @@ func (s *SlackBot) handleBotCommands() {
 				attachmentChannel.Attachement = attachment
 				s.botReplyChannel <- attachmentChannel
 			case "service":
-				if len(commandArray) == 2 {
+				if len(commandArray) == 3 {
 					name := parseName(commandArray[2])
 					res, err := icinga2.ServiceStatus(name)
 					if err != nil {
@@ -175,7 +175,7 @@ func (s *SlackBot) handleBotCommands() {
 				}
 
 			case "host":
-				if len(commandArray) == 2 {
+				if len(commandArray) == 3 {
 					name := parseName(commandArray[2])
 					res, err := icinga2.HostStatus(name)
 					if err != nil {
