@@ -59,7 +59,7 @@ func (i *Icinga2) check(name string, objectType ObjectType, all bool) (Result, e
 	queryParams := "?attrs=name&attrs=state&attrs=display_name&attrs=check_command&attrs=last_check"
 
 	if !all {
-		queryParams = fmt.Sprintf("(%%22%s%%22,%s.display_name)&attrs=name&attrs=state&attrs=display_name&attrs=check_command&attrs=last_check", name, strings.TrimSuffix(string(objectType), "s"))
+		queryParams = fmt.Sprintf("?filter=match(%%22%s%%22,%s.display_name)&attrs=name&attrs=state&attrs=display_name&attrs=check_command&attrs=last_check", name, strings.TrimSuffix(string(objectType), "s"))
 	}
 
 	url := fmt.Sprintf("%s%s", server, queryParams)
