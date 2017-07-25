@@ -97,9 +97,7 @@ func formatMessage(attr Attribute, objectType ObjectType) *slack.Attachment {
 				Short: true,
 			},
 		},
-		AuthorName: "mlabouardy",
-		AuthorLink: "https://github.com/mlabouardy",
-		Footer:     "Icinga 2",
+		Footer:     "mlabouardy",
 		FooterIcon: "https://yt3.ggpht.com/-VxW-2wCxzHs/AAAAAAAAAAI/AAAAAAAAAAA/fjyskzeA-VA/s900-c-k-no-mo-rj-c0xffffff/photo.jpg",
 		Ts:         attr.CheckTime,
 	}
