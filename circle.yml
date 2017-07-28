@@ -14,4 +14,4 @@ jobs:
           command: go get -v
       - run:
           name: Run unit tests
-          command: go test -v
+          command: go test
