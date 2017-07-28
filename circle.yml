@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.8
+      - image: mlabouardy/icinga2:r2.6.3-1
 
     working_directory: /go/src/github.com/mlabouardy/icinga2-slack-bot
 
