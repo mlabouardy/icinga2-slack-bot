@@ -16,8 +16,12 @@ jobs:
       - run:
           name: Waiting for Icinga2 to be ready
           command: |
-              sleep 10s
-              
-  test:
-    override:
-      - go test -v -race ./..
+            	sleep 10
+
+      - run:
+          name: Run vet command
+          command: go vet ./...
+        
+      - run:
+          name: Run unit tests
+          command: go test -v -race ./...
