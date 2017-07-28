@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mlabouardy/icinga2-slack-bot/config"
+	. "./config"
 	"github.com/nlopes/slack"
 )
 
