@@ -6,5 +6,6 @@ jobs:
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       - checkout
-      - run: go get -v
+      - run: go get github.com/BurntSushi/toml
+      - run: go get github.com/nlopes/slack
       - run: go test -v
