@@ -8,4 +8,4 @@ jobs:
       - checkout
       - run: go get github.com/BurntSushi/toml
       - run: go get github.com/nlopes/slack
-      - run: go test -v
+      - run: go test
