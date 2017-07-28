@@ -6,7 +6,7 @@ jobs:
     environment:
       ORG_NAME: mlabouardy
       REPO_NAME: icinga2-slack-bot
-    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    working_directory: /go/src/github.com/$ORG_NAME/$REPO_NAME
     steps:
       - checkout
       - run:
