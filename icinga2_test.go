@@ -9,6 +9,11 @@ var (
 	i Icinga2
 )
 
+const (
+	HOST_NAME    = "hostname.test.com"
+	SERVICE_NAME = "vrf-aws-001-london"
+)
+
 func init() {
 	i = Icinga2{
 		Host:     "localhost",
@@ -19,7 +24,7 @@ func init() {
 
 func TestConstructFilter(t *testing.T) {
 	expectedFilterOneHost := Filter{
-		Filter: "match(\"*hostname.test.com*\", host.display_name)",
+		Filter: "match(\"*" + HOST_NAME + "*\", host.display_name)",
 		Attrs: []string{
 			"display_name",
 			"name",
@@ -28,7 +33,7 @@ func TestConstructFilter(t *testing.T) {
 			"check_command",
 		},
 	}
-	resultFilterOneHost := i.constructFilter("hostname.test.com", HOSTS, false)
+	resultFilterOneHost := i.constructFilter(HOST_NAME, HOSTS, false)
 	if !reflect.DeepEqual(expectedFilterOneHost, resultFilterOneHost) {
 		t.Error(
 			"For 'check one host status'",
@@ -38,7 +43,7 @@ func TestConstructFilter(t *testing.T) {
 	}
 
 	expectedFilterOneService := Filter{
-		Filter: "match(\"*vrf-aws-001-london*\", service.display_name)",
+		Filter: "match(\"*" + SERVICE_NAME + "*\", service.display_name)",
 		Attrs: []string{
 			"display_name",
 			"name",
@@ -47,7 +52,7 @@ func TestConstructFilter(t *testing.T) {
 			"check_command",
 		},
 	}
-	resultFilterOneService := i.constructFilter("vrf-aws-001-london", SERVICES, false)
+	resultFilterOneService := i.constructFilter(SERVICE_NAME, SERVICES, false)
 	if !reflect.DeepEqual(expectedFilterOneService, resultFilterOneService) {
 		t.Error(
 			"For 'check one service status'",
