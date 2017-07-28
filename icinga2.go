@@ -11,6 +11,7 @@ import (
 	"net/http"
 )
 
+// Icinga2 represents an icinga2 server
 type Icinga2 struct {
 	Host     string
 	Username string
@@ -19,19 +20,23 @@ type Icinga2 struct {
 
 type ObjectType string
 
+// Type of element to monitor in icinga
 const (
 	SERVICES = "services"
 	HOSTS    = "hosts"
 )
 
+// Result will encapsulate the icinga2 api json response
 type Result struct {
 	Results []Object `json:"results"`
 }
 
+// Object represents a single host/service
 type Object struct {
 	Attrs Attribute `json:"attrs"`
 }
 
+// Attribute represents properties of host/service
 type Attribute struct {
 	CheckCommand string      `json:"check_command"`
 	DisplayName  string      `json:"display_name"`
@@ -41,6 +46,7 @@ type Attribute struct {
 	HostName     string      `json:"host_name"`
 }
 
+// Filter represents filters to pass to icinga2 api request
 type Filter struct {
 	Filter string   `json:"filter,omitempty"`
 	Attrs  []string `json:"attrs"`
@@ -115,18 +121,22 @@ func (i *Icinga2) check(name string, objectType ObjectType, checkAll bool) (Resu
 	return result, nil
 }
 
+// HostStatus calls check method to get the status of a single host
 func (i *Icinga2) HostStatus(name string) (Result, error) {
 	return i.check(name, HOSTS, false)
 }
 
+// ServiceStatus calls check method to get the status of a single service
 func (i *Icinga2) ServiceStatus(name string) (Result, error) {
 	return i.check(name, SERVICES, false)
 }
 
+// ListServices calls check to get the status of all the services
 func (i *Icinga2) ListServices() (Result, error) {
 	return i.check("", SERVICES, true)
 }
 
+// ListHosts calls check to get the status of all the hosts
 func (i *Icinga2) ListHosts() (Result, error) {
 	return i.check("", HOSTS, true)
 }

@@ -8,6 +8,8 @@ import (
 	"github.com/nlopes/slack"
 )
 
+// SlackBot represents a bot deployed in slack
+// We use two channels one to receive bot commands and the other to push command results
 type SlackBot struct {
 	api               *slack.Client
 	botReplyChannel   chan AttachmentChannel
@@ -17,20 +19,23 @@ type SlackBot struct {
 type BotCentral struct {
 	Channel *slack.Channel
 	Event   *slack.MessageEvent
-	UserId  string
+	UserID  string
 }
 
+// AttachmentChannel represents the message to be send to slack
 type AttachmentChannel struct {
 	Channel      *slack.Channel
 	Attachement  *slack.Attachment
 	DisplayTitle string
 }
 
+// Status represents icinga2 host/service state label with its corresponding color
 type Status struct {
 	Label string
 	Color string
 }
 
+// List of colors used in slack message color
 const (
 	GREEN   = "#4CAE50"
 	RED     = "#F44336"
@@ -40,7 +45,7 @@ const (
 )
 
 var (
-	botId          string
+	botID          string
 	LIST_OF_STATUS = map[float32]Status{
 		0: Status{
 			Label: "OK",
@@ -66,9 +71,9 @@ func parseName(name string) string {
 	parts := strings.Split(str, "|")
 	if len(parts) == 2 {
 		return strings.TrimRight(parts[1], ">")
-	} else {
-		return parts[0]
 	}
+
+	return parts[0]
 }
 
 func formatMessage(attr Attribute, objectType ObjectType) *slack.Attachment {
@@ -256,6 +261,9 @@ func (s *SlackBot) handleBotReply() {
 	}
 }
 
+// Connect will initialise an RTM connection and will listen to slack events
+// in case of *slack.MessageEvent event, we parse the message to see if it a icinga2 command
+// when the bot user is mentioned we let it run through a flow (handleBotCommands()) to decide what the bot should reply
 func (s *SlackBot) Connect() {
 	rtm := s.api.NewRTM()
 
@@ -271,7 +279,7 @@ Loop:
 		case msg := <-rtm.IncomingEvents:
 			switch ev := msg.Data.(type) {
 			case *slack.ConnectedEvent:
-				botId = ev.Info.User.ID
+				botID = ev.Info.User.ID
 			case *slack.MessageEvent:
 				channelInfo, err := s.api.GetChannelInfo(ev.Channel)
 				if err != nil {
@@ -281,10 +289,10 @@ Loop:
 				botCentral := &BotCentral{
 					Channel: channelInfo,
 					Event:   ev,
-					UserId:  ev.User,
+					UserID:  ev.User,
 				}
 
-				if ev.Type == "message" && strings.HasPrefix(ev.Text, "<@"+botId+">") {
+				if ev.Type == "message" && strings.HasPrefix(ev.Text, "<@"+botID+">") {
 					s.botCommandChannel <- botCentral
 				}
 			case *slack.RTMError:
