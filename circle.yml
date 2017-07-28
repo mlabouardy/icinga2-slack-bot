@@ -1,5 +1,10 @@
-machine:
-  services:
-    - docker
-
-test:
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.8
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    steps:
+      - checkout
+      - run: go get -v
+      - run: go test -v
