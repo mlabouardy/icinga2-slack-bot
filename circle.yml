@@ -3,8 +3,15 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.8
+    environment:
+      ORG_NAME: mlabouardy
+      REPO_NAME: icinga2-slack-bot
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       - checkout
-      - run: go get -v
-      - run: go test -v
+      - run:
+          name: Get dependencies
+          command: go get -v
+      - run:
+          name: Run unit tests
+          command: go test -v
