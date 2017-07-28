@@ -62,7 +62,8 @@ var (
 )
 
 func parseName(name string) string {
-	parts := strings.Split(name, "|")
+	str := strings.Replace(name, "\"", "", -1)
+	parts := strings.Split(str, "|")
 	if len(parts) == 2 {
 		return strings.TrimRight(parts[1], ">")
 	} else {
@@ -99,7 +100,7 @@ func formatMessage(attr Attribute, objectType ObjectType) *slack.Attachment {
 		},
 		Footer:     "mlabouardy",
 		FooterIcon: "https://yt3.ggpht.com/-VxW-2wCxzHs/AAAAAAAAAAI/AAAAAAAAAAA/fjyskzeA-VA/s900-c-k-no-mo-rj-c0xffffff/photo.jpg",
-		Ts:         attr.CheckTime,
+		//Ts:         attr.CheckTime.(json.Number),
 	}
 
 	if objectType == SERVICES {

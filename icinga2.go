@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/tls"
 	"encoding/json"
 	"errors"
@@ -8,7 +9,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 )
 
 type Icinga2 struct {
@@ -37,8 +37,13 @@ type Attribute struct {
 	DisplayName  string      `json:"display_name"`
 	Name         string      `json:"name"`
 	State        float32     `json:"state"`
-	CheckTime    json.Number `json:"last_check,float"`
+	CheckTime    interface{} `json:"last_check,string"`
 	HostName     string      `json:"host_name"`
+}
+
+type Filter struct {
+	Filter string   `json:"filter,omitempty"`
+	Attrs  []string `json:"attrs"`
 }
 
 var (
@@ -53,22 +58,41 @@ func init() {
 	}
 }
 
-func (i *Icinga2) check(name string, objectType ObjectType, all bool) (Result, error) {
-
-	server := fmt.Sprintf("https://%s:5665/v1/objects/%s", i.Host, objectType)
-	queryParams := "?attrs=name&attrs=state&attrs=display_name&attrs=check_command&attrs=last_check"
-
-	if !all {
-		queryParams = fmt.Sprintf("?filter=match(%%22%s%%22,%s.display_name)&attrs=name&attrs=state&attrs=display_name&attrs=check_command&attrs=last_check", name, strings.TrimSuffix(string(objectType), "s"))
+func (i *Icinga2) constructFilter(name string, objectType ObjectType, checkAll bool) Filter {
+	filter := Filter{
+		Attrs: []string{
+			"display_name",
+			"name",
+			"last_check",
+			"state",
+			"check_command",
+		},
 	}
 
-	url := fmt.Sprintf("%s%s", server, queryParams)
-	if objectType == SERVICES {
-		url = fmt.Sprintf("%s%s&attrs=host_name", server, queryParams)
+	if !checkAll {
+		if objectType == HOSTS {
+			filter.Filter = "match(\"*" + name + "*\", host.display_name)"
+		} else {
+			filter.Filter = "match(\"*" + name + "*\", service.display_name)"
+		}
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	return filter
+}
+
+func (i *Icinga2) check(name string, objectType ObjectType, checkAll bool) (Result, error) {
+	url := fmt.Sprintf("https://%s:5665/v1/objects/%s", i.Host, objectType)
+
+	filter := i.constructFilter(name, objectType, checkAll)
+
+	b := new(bytes.Buffer)
+
+	json.NewEncoder(b).Encode(filter)
+
+	req, err := http.NewRequest("POST", url, b)
 	req.SetBasicAuth(i.Username, i.Password)
+	req.Header.Set("X-HTTP-Method-Override", "GET")
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,7 +108,7 @@ func (i *Icinga2) check(name string, objectType ObjectType, all bool) (Result, e
 
 	json.Unmarshal(body, &result)
 
-	if !all && len(result.Results) == 0 {
+	if !checkAll && len(result.Results) == 0 {
 		return result, errors.New(name + " not found")
 	}
 
