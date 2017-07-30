@@ -27,7 +27,7 @@ $ docker run -d --name bot icinga2-bot
 or just use the official DockerHub image:
 
 ```
-$ docker run -d --name bot mlabouardy/icinga2-bot:slack
+$ docker run -d -v /PATH/TO/config.toml:/go/src/github/config.toml --name bot mlabouardy/icinga2-bot:slack
 ```
 
 ## Available commands
