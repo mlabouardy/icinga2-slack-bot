@@ -60,6 +60,11 @@ func TestFormatMessage(t *testing.T) {
 				Value: LIST_OF_STATUS[attr.State].Label,
 				Short: true,
 			},
+			slack.AttachmentField{
+				Title: "Hostname",
+				Value: attr.HostName,
+				Short: true,
+			},
 		},
 		Footer:     "mlabouardy",
 		FooterIcon: "https://yt3.ggpht.com/-VxW-2wCxzHs/AAAAAAAAAAI/AAAAAAAAAAA/fjyskzeA-VA/s900-c-k-no-mo-rj-c0xffffff/photo.jpg",
