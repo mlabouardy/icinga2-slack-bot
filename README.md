@@ -15,6 +15,21 @@ To deploy your icinga2 bot to Slack, you need to:
 * Setup icinga2 credentials & slack token in config.toml file
 * Execute `go run $(ls -1 *.go | grep -v _test.go)`
 
+## With Docker
+
+```
+$ git clone git@github.com:mlabouardy/icinga2-slack-bot.git
+$ cd icinga2-slack-bot
+$ docker build -t icinga2-bot .
+$ docker run -d --name bot icinga2-bot
+```
+
+or just use the official DockerHub image:
+
+```
+$ docker run -d --name bot mlabouardy/icinga2-bot:slack
+```
+
 ## Available commands
 
 ![alt text](https://raw.githubusercontent.com/mlabouardy/icinga2-slack-bot/master/screenshots/help.png)
