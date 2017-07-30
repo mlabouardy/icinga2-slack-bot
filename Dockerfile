@@ -1,11 +1,12 @@
 FROM golang:1.8.0
 MAINTAINER mlabouardy <mohamed@labouardy.com>
 
-COPY . /app
+RUN mkdir -p /go/src/github
 
-WORKDIR /app
+COPY . /go/src/github/
 
-RUN go get github.com/nlopes/slack
-RUN go get github.com/BurntSushi/toml
+WORKDIR /go/src/github/
 
-CMD go run *.go
+RUN go get -v
+
+CMD go run $(ls -1 *.go | grep -v _test.go)
