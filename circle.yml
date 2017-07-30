@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.8
-      - image: mlabouardy/icinga2:r2.6.3-1
+      - image: mlabouardy/icinga2:test
 
     working_directory: /go/src/github.com/mlabouardy/icinga2-slack-bot
 
@@ -16,12 +16,16 @@ jobs:
       - run:
           name: Waiting for Icinga2 to be ready
           command: |
-            	sleep 10
+            	sleep 20
 
       - run:
           name: Run vet command
           command: go vet ./...
-        
+
       - run:
           name: Run unit tests
+          environment:
+            HOST_ICINGA: localhost
+            USERNAME_ICINGA: root
+            PASSWORD_ICINGA: icinga
           command: go test -v -race ./...

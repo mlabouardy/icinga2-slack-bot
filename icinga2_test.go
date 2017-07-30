@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"reflect"
 	"testing"
 )
@@ -10,15 +11,15 @@ var (
 )
 
 const (
-	HOST_NAME    = "hostname.test.com"
-	SERVICE_NAME = "vrf-aws-001-london"
+	HOST_NAME    = "google.com"
+	SERVICE_NAME = "apt"
 )
 
 func init() {
 	i = Icinga2{
-		Host:     "localhost",
-		Username: "root",
-		Password: "icinga",
+		Host:     os.Getenv("HOST_ICINGA"),
+		Username: os.Getenv("USERNAME_ICINGA"),
+		Password: os.Getenv("PASSWORD_ICINGA"),
 	}
 }
 
@@ -107,5 +108,15 @@ func TestCheck(t *testing.T) {
 	_, err = i.check("", SERVICES, true)
 	if err != nil {
 		t.Error("Cannot get list of services")
+	}
+
+	_, err = i.check(SERVICE_NAME, SERVICES, false)
+	if err != nil {
+		t.Error("Cannot check the service")
+	}
+
+	_, err = i.check(HOST_NAME, HOSTS, false)
+	if err != nil {
+		t.Error("Cannot check the host")
 	}
 }
