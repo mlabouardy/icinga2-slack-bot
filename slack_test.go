@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"reflect"
 	"testing"
 
@@ -38,7 +37,7 @@ func TestFormatMessage(t *testing.T) {
 
 	expectedAttachment := &slack.Attachment{
 		Title:     "Icinga 2 - Dashboard",
-		TitleLink: fmt.Sprintf("http://%s/icingaweb2/dashboard", os.Getenv("ICINGA_HOST")),
+		TitleLink: fmt.Sprintf("http://%s/icingaweb2/dashboard", config.Icinga2.Host),
 		Color:     LIST_OF_STATUS[attr.State].Color,
 		Fields: []slack.AttachmentField{
 			slack.AttachmentField{
