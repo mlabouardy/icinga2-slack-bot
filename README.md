@@ -34,3 +34,14 @@ To deploy your icinga2 bot to Slack, you need to:
 ### Filter by service name
 
 ![alt text](https://raw.githubusercontent.com/mlabouardy/icinga2-slack-bot/master/screenshots/service.png)
+
+## Features
+- [x] All hosts status
+- [x] Single host status
+- [x] All services status
+- [x] Single service status
+- [x] Docker support
+
+## Contributors
+
+- Mohamed Labouardy
