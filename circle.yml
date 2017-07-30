@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Waiting for Icinga2 to be ready
           command: |
-            	sleep 20
+            sleep 20
 
       - run:
           name: Run vet command
