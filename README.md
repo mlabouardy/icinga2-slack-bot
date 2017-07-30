@@ -2,10 +2,18 @@
 
 This bot uses Icinga2 remote API to fetch the status of the services & hosts running in icinga2
 
-## Configuration
+## Requirements
 
-- Setup a slack bot token
-- Setup icinga2 instance credentials in config.toml
+* Go >= 1.8.0
+* Icinga2 with API feature enabled
+
+## Deploy
+
+To deploy your icinga2 bot to Slack, you need to:
+
+* [Create a new bot user](https://my.slack.com/services/new/bot) integration on Slack and get your token
+* Setup icinga2 credentials & slack token in config.toml file
+* Execute `go run $(ls -1 *.go | grep -v _test.go)`
 
 ## Available commands
 
